@@ -38,6 +38,23 @@ router.delete("/agents/:id", function(req,res,next){
     res.send({type:"DELETE"});
 });
 
+router.get("/agentsf", function(req,res,next){
+    console.log('REACTIVATE received');
+    if (!req.body.category) {
+        console.log("Category field needed");
+        res.send("REACTIVATE denied, request needs a category field!");
+    }
 
+    Agent.findOne({available: false, category: req.body.category},{available:true},function(err,agent){
+        if(!agent) {
+            res.send("No agents found, sorry!")
+        } else {
+            res.send(agent);
+        }
+    }).catch(next);
+});
 
 module.exports = router;
+
+
+
